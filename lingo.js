@@ -72,7 +72,7 @@ class Lingo {
                     console.log(networkWorker)
                     networkWorker.postAndGet('http://192.168.64.3/post-tester/post.php',{
                         'name': 'Wayne',
-                    })
+                    },5000)
                     
                 }
             }
@@ -95,10 +95,19 @@ class Lingo {
 
 //LingoNetwork class
 /*
-This class will basicly add Network functionality to Lingo models.
-Attributes:
--n : will initalize the LingoNetwork class that will send AJAX requests and will return real time data 
-from the database.
+ *  This class will basicly add Network functionality to Lingo models.
+ *  Attributes:
+ *  -n : will initalize the LingoNetwork class that will send AJAX requests and will return real time data 
+ *  from the database.
+ * 
+ *  -si : sendInterval : 
+ *  Params:
+ *  (-si)1.*{True | False}-weather it will be sent to the server by an interval.
+ *  (-sit)2.*{Seconds-int-<400}-Set the interval timing
+ *  (-data)3.*{Data-any type- Well formatted JSON if it's an Stringifable variable}
+ *  (-URL)4.*{URL-If set in the setting object in the Models array then URL='preset', else URL='Well formatted URL'}-Set the URL to send data
+ *  (-type)5.Optional-{POST(0)|GET(1)}-Determine if the request will be post or a get request
+
 */
 class LingoNetwork extends Lingo {
     constructor (element,data) {
@@ -113,14 +122,30 @@ class LingoNetwork extends Lingo {
     *  Data is an object
     */
     postAndGet(URL,data,repeat) {
-
+        //If there's an interval
+        if(typeof repeat != null && typeof repeat == 'number'){
+            setInterval(function () {
+                $.ajax({
+                    type: "POST",
+                    url: URL.toString(),
+                    data: data,
+                    cache: false,
+                    success: function(response){
+                        console.log(response)
+                        return response;
+                    }
+                }).fail(function () {
+                    throw new Error('The request has failed.');
+                })
+            },repeat);
+        }
         $.ajax({
             type: "POST",
             url: URL.toString(),
             data: data,
             cache: false,
             success: function(response){
-                alert(response)
+                console.log(response)
                 return response;
             }
         }).fail(function () {
