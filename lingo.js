@@ -19,6 +19,7 @@ class Lingo {
         console.table(this.data.Models);
     }
     replaceElementWithDataValue(){
+        var data = this.data;
         //Display attribute values to the lv models
         var self = this;
         $('[lv]').each(function(){
@@ -60,20 +61,14 @@ class Lingo {
                         boundEvent(data,element)
                         self.updateLVTags(attribute)
                     });
+                    element.addEventListener('change',function () {
+                        boundEvent(data,element)
+                        self.updateLVTags(attribute)
+                    });
                 }
                 else { 
                     //If the key was not found in the data object
                     throw new TypeError(`Model attribute ${attribute} doesnt exist in the data object. make sure to add it in the data object. \n at sub-element <${element.tagName}> \n Id:${element.id} \n ClassName: ${element.className}`)
-                }
-                //If the Element has the -n attribute
-                if (element.hasAttribute('-n')){
-                    //Then a LingoNetwork class should be instantiated
-                    var networkWorker = new LingoNetwork(element,this.data);
-                    console.log(networkWorker)
-                    networkWorker.postAndGet('http://192.168.64.3/post-tester/post.php',{
-                        'name': 'Wayne',
-                    },5000)
-                    
                 }
             }
         }
@@ -91,6 +86,73 @@ class Lingo {
             this.textContent = data[model]
         });
     }
+    //This will change all tags when the data object has been modified through the console
+    updateAllTags() {
+        var self = this;
+        setInterval(function() {
+            var data = self.data.Models;
+            //This will loop over all elements with the lv attribute
+            var attE = `[lv]`;
+            $(attE).each(function(){
+                var attribute = $(this).attr('lv');
+                //This means the element
+                this.textContent = data[attribute]
+                $(this).val(data[attribute])
+            });
+            //Loop over lm models
+            var attM = `[lm]`;
+            $(attM).each(function(){
+                var attribute = $(this).attr('lm');
+                //This means the element
+                this.textContent = data[attribute]
+                $(this).val(data[attribute])
+            });
+        },500)
+    }
+    //Create all network workers
+    createNetworkWorkers() {
+        var DOMElements = $('body').find('*');
+        //Loop therough all elements in the body
+        DOMElements.each(function(){
+            //If they have the -n attribute
+            if (this.hasAttribute('-n')){
+                var element = $(this);
+                var cap = '';
+                //Then a LingoNetwork class and a new network worker should be instantiated
+                var networkWorker = new LingoNetwork(element.className,this.data);
+                //If the element has a -si attribute and a -sit that returns typeof of number
+                if(this.hasAttribute('-type')) {
+                    var type = $(element).attr('-type');
+                }
+                else {
+                    type = "POST"
+                }
+                if(this.hasAttribute('-set')) {
+                    var setType = $(element).attr('-set');
+                }
+                else {
+                    setType = "POST"
+                }
+                if(this.hasAttribute('cap')){
+                    var cap = $(element).attr('cap');
+                }
+                //Intervals and caps
+                if(this.hasAttribute('-si') && this.hasAttribute('-sit')){
+                    var interval = $(element).attr('-sit')
+                        networkWorker.postAndGet('http://192.168.64.3/post-tester/post.php',{
+                            'name': 'Wayne',
+                        },interval,setType,type,$(element),cap)
+                }   
+
+                if(!this.hasAttribute('-si') && this.hasAttribute('-sit')) {
+                    // trigger without interval
+                    networkWorker.postAndGet('http://192.168.64.3/post-tester/post.php',{
+                        'name': 'Wayne',
+                    },'STORE',type)
+                    }
+                }
+        })
+    }
 }
 
 //LingoNetwork class
@@ -105,9 +167,9 @@ class Lingo {
  *  (-si)1.*{True | False}-weather it will be sent to the server by an interval.
  *  (-sit)2.*{Seconds-int-<400}-Set the interval timing
  *  (-data)3.*{Data-any type- Well formatted JSON if it's an Stringifable variable}
- *  (-URL)4.*{URL-If set in the setting object in the Models array then URL='preset', else URL='Well formatted URL'}-Set the URL to send data
+ *  (-url)4.*{URL-If set in the setting object in the Models array then URL='preset', else URL='Well formatted URL'}-Set the URL to send data
  *  (-type)5.Optional-{POST(0)|GET(1)}-Determine if the request will be post or a get request
-
+ *  (-set)6.-Optional-{SET|STORE}-Determine if the request result will be set to be the element content
 */
 class LingoNetwork extends Lingo {
     constructor (element,data) {
@@ -121,36 +183,48 @@ class LingoNetwork extends Lingo {
     *  Theres option for Headers and AJAX preparation such as @csrf token
     *  Data is an object
     */
-    postAndGet(URL,data,repeat) {
+    postAndGet(URL,data,repeat,set,type,element,cap) {
+        var counter = 0;
         //If there's an interval
-        if(typeof repeat != null && typeof repeat == 'number'){
-            setInterval(function () {
+        if(typeof repeat != null){
+            alert(cap)
+            var looper = setInterval(function () {
+                counter++;
                 $.ajax({
-                    type: "POST",
+                    type: type,
                     url: URL.toString(),
                     data: data,
                     cache: false,
                     success: function(response){
                         console.log(response)
+                        if(set == 'SET' && typeof set != null) {
+                            element.text(response)
+                            element.val(response)
+                        }
                         return response;
                     }
                 }).fail(function () {
                     throw new Error('The request has failed.');
                 })
+                if(cap != '' && counter >= cap) {
+                    clearInterval(looper)
+                }
             },repeat);
         }
-        $.ajax({
-            type: "POST",
-            url: URL.toString(),
-            data: data,
-            cache: false,
-            success: function(response){
-                console.log(response)
-                return response;
-            }
-        }).fail(function () {
-            throw new Error('The request has failed.');
-        })
+        else{
+            $.ajax({
+                type: "POST",
+                url: URL.toString(),
+                data: data,
+                cache: false,
+                success: function(response){
+                    console.log(response)
+                    return response;
+                }
+            }).fail(function () {
+                throw new Error('The request has failed.');
+            })
+        }
     }
 }
 
@@ -162,6 +236,13 @@ var lingo = new Lingo(".s",{
         lingo:'[]'
     }}
 )
+
+// Currently always false, but will add more ways to check weather the data object has been changed
+if(typeof lingo.data.Models == 'string') {
+    lingo.updateAllTags()
+}
+
 // Lingo.make(new LingoTestUnit exceptionControl --vm="username" --main)
 lingo.replaceElementWithDataValue()
 
+lingo.createNetworkWorkers()
