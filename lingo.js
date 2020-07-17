@@ -35,43 +35,38 @@ class Lingo {
         With the lc(Lingo content) attribute will change
         */
        //This will check if elements have the lm attribute and will set everything
-        for (var k = 0; k < $(this.element).length; k++) {
-            var data = this.data.Models;
-            //Set the effected element to be the element with the attribute   
-            let element = $(this.element)[k];
-            if (element.hasAttribute("lm")) {
-                //Then assign them the events for lm elements
-                //Get attributes such as lm and change the attributed elements to the real time values of them
-                var attribute = $(this.element).eq(k).attr('lm');
-                //If the attribute is an actual varaible passed in the data object
-                if(attribute in this.data.Models) {    
-                    //Change the element text to be the current value of the attribute instace in the data object.
-                    $(this.element).eq(k).val(this.data.Models[attribute])
-                    $(this.element).eq(k).text(this.data.Models[attribute])
-                    //Add a change event listener to the model and every time its value changes, the data object key value changes.
-                    //And then all the other elements with lv attribute is changes aswell 
-                    
-                    function boundEvent (data,element){
-                        let oldData = data[attribute];
-                        data[attribute] = $(element).val();
-                        // alert(`Changed data object value from ${oldData} to ${data[attribute]}`)
-                    }
-                    var self = this;
-                    element.addEventListener('keyup',function () {
-                        boundEvent(data,element)
-                        self.updateLVTags(attribute)
-                    });
-                    element.addEventListener('change',function () {
-                        boundEvent(data,element)
-                        self.updateLVTags(attribute)
-                    });
+       var DOMElements = $('body').find('[lm]');
+       var self = this;
+       DOMElements.each(function(){
+            var data = self.data.Models;
+            if(this.hasAttribute('lm')){
+                //Grant master permissions
+                var attribute = $(this).attr('lm');
+                if(attribute in data) {
+                    //If the attribute is in the data object
+                    $(this).val(data[attribute]);
+                    $(this).text(data[attribute]);
                 }
-                else { 
-                    //If the key was not found in the data object
-                    throw new TypeError(`Model attribute ${attribute} doesnt exist in the data object. make sure to add it in the data object. \n at sub-element <${element.tagName}> \n Id:${element.id} \n ClassName: ${element.className}`)
+                function boundEvent (data,element){
+                    let oldData = data[attribute];
+                    data[attribute] = $(element).val();
+                    // alert(`Changed data object value from ${oldData} to ${data[attribute]}`)
                 }
+                this.addEventListener('keyup',function () {
+                    boundEvent(data,$(this))
+                    self.updateLVTags(attribute)
+                });
+                this.addEventListener('change',function () {
+                    boundEvent(data,$(this))
+                    self.updateLVTags(attribute)
+                });
             }
-        }
+            else { 
+                //If the key was not found in the data object
+                throw new TypeError(`Model attribute ${attribute} doesnt exist in the data object. make sure to add it in the data object. \n at sub-element <${this.tagName}> \n Id:${this.id} \n ClassName: ${this.className}`)
+            }
+        })
+
         //This will check elements with the lv attribute {version 0.0.2}
         /*
         LV tag- elements with this attribute will receive their data in real time from the data object
@@ -187,7 +182,6 @@ class LingoNetwork extends Lingo {
         var counter = 0;
         //If there's an interval
         if(typeof repeat != null){
-            alert(cap)
             var looper = setInterval(function () {
                 counter++;
                 $.ajax({
