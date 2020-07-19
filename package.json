@@ -3,9 +3,12 @@
   "version": "0.0.5",
   "description": "Write less javascript.",
   "main": "index.js",
+
   "scripts": {
-    "test": "lingo"
+    "test": "lingo",
+    "make:controller": "node ./console/create_controller.js"
   },
+
   "dependencies": {
     "jquery": "^3.2.1"
   },
@@ -23,5 +26,5 @@
   "bugs": {
     "url": "https://github.com/ilayalmalem/Lingo.js/issues"
   },
-  "homepage": "https://github.com/ilayalmalem/Lingo.js#readme"
+  "homepage": "https://github.com/ilayalmalem/Lingo.js#readme" 
 }

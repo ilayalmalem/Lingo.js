@@ -233,7 +233,20 @@ class LingoNetwork extends Lingo {
         }
     }
 }
+//Controllers
+class Controller {
+    constructor(name){
+        this.name = name;
+    }
+    static writeName(){
+        console.log(this.name);
+    }
+}
 
 // Lingo.make(new LingoTestUnit exceptionControl --vm="username" --main)
 
-module.exports = Lingo;
+module.exports = {
+    Lingo: Lingo,
+    LingoNetwork: LingoNetwork,
+    Controller: Controller
+};
