@@ -1,3 +1,8 @@
+//Npm welcome message
+exports.printMsg = function() {
+    console.log("LingoJS installed properly,create something amazing now.");
+}
+
 //Set the LingoError class
 function LingoError(message) {
     this.name = "LingoError";
@@ -224,11 +229,18 @@ class LingoNetwork extends Lingo {
 
 
 
-var lingo = new Lingo(".s",{
-    Models:{
-        d:'s',
-        lingo:'[]'
-    }}
+var lingo = new Lingo('root',
+    {
+        Models:{
+            d:'s',
+            lingo:'[]'
+        },
+        Controllers:{
+            PassData:'PassAllMNData',
+            LOC:'LOC',
+
+        }
+    }
 )
 
 // Currently always false, but will add more ways to check weather the data object has been changed
@@ -240,3 +252,5 @@ if(typeof lingo.data.Models == 'string') {
 lingo.replaceElementWithDataValue()
 
 lingo.createNetworkWorkers()
+
+const Lingo = require('index.js');

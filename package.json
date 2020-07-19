@@ -1,0 +1,27 @@
+{
+  "name": "@ilayalmalem/lingojs",
+  "version": "0.0.2",
+  "description": "Write less javascript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "lingo"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilayalmalem/Lingo.js.git"
+  },
+  "keywords": [
+    "LingoJS",
+    "Backend",
+    "communication"
+  ],
+  "author": "Ilay David Almalem",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ilayalmalem/Lingo.js/issues"
+  },
+  "homepage": "https://github.com/ilayalmalem/Lingo.js#readme"
+}
