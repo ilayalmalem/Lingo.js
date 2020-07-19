@@ -1,5 +1,9 @@
 var lingo = new Lingo('.e',{
     Models:{
-        'ds':'ds'
+        dss:'dsdsa'
     }
 })
+
+lingo.replaceElementWithDataValue()
+
+lingo.createNetworkWorkers()

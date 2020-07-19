@@ -1,7 +1,7 @@
 //Npm welcome message
-exports.printMsg = function() {
-    console.log("LingoJS installed properly,create something amazing now.");
-}
+// exports.printMsg = function() {
+//     console.log("LingoJS installed properly,create something amazing now.");
+// }
 
 //Set the LingoError class
 function LingoError(message) {
@@ -24,13 +24,16 @@ class Lingo {
         console.table(this.data.Models);
     }
     replaceElementWithDataValue(){
-        var data = this.data;
-        //Display attribute values to the lv models
+        var data = this.data; 
+        //Display attribute values to the lv models and throw errors
         var self = this;
         $('[lv]').each(function(){
             //This means the element
             var attribute = $(this).attr('lv');
             this.textContent = self.data.Models[attribute]
+            if(!self.data.Models.hasOwnProperty(attribute)){ 
+                throw new TypeError(`Model value ${attribute} doesnt exist in the data object. make sure to add it in the data object. \n at sub-element <${this.tagName}> \n Id:${this.id} \n ClassName: ${this.className}`)
+            }
         });
         /*LM attribute =>
         The lm attribute stands for: Lingo model if an element has it, it will also have control
@@ -66,7 +69,7 @@ class Lingo {
                     self.updateLVTags(attribute)
                 });
             }
-            else { 
+            if(!self.data.Models.hasOwnProperty(attribute)){ 
                 //If the key was not found in the data object
                 throw new TypeError(`Model attribute ${attribute} doesnt exist in the data object. make sure to add it in the data object. \n at sub-element <${this.tagName}> \n Id:${this.id} \n ClassName: ${this.className}`)
             }
@@ -80,6 +83,7 @@ class Lingo {
     updateLVTags(model){
         var data = this.data.Models;
         //This will loop over all elements with the lv attribute
+        var self = this;
         var attE = `[lv=${model}]`;
         $(attE).each(function(){
             //This means the element
@@ -109,6 +113,7 @@ class Lingo {
             });
         },500)
     }
+
     //Create all network workers
     createNetworkWorkers() {
         var DOMElements = $('body').find('*');
@@ -227,30 +232,5 @@ class LingoNetwork extends Lingo {
     }
 }
 
-
-
-var lingo = new Lingo('root',
-    {
-        Models:{
-            d:'s',
-            lingo:'[]'
-        },
-        Controllers:{
-            PassData:'PassAllMNData',
-            LOC:'LOC',
-
-        }
-    }
-)
-
-// Currently always false, but will add more ways to check weather the data object has been changed
-if(typeof lingo.data.Models == 'string') {
-    lingo.updateAllTags()
-}
-
 // Lingo.make(new LingoTestUnit exceptionControl --vm="username" --main)
-lingo.replaceElementWithDataValue()
 
-lingo.createNetworkWorkers()
-
-const Lingo = require('index.js');
