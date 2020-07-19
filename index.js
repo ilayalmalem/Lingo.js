@@ -1,7 +1,9 @@
 //Npm welcome message
-// exports.printMsg = function() {
-//     console.log("LingoJS installed properly,create something amazing now.");
-// }
+exports.printMsg = function() {
+    console.log("LingoJS installed properly,create something amazing now.");
+}
+
+
 
 //Set the LingoError class
 function LingoError(message) {
@@ -234,3 +236,4 @@ class LingoNetwork extends Lingo {
 
 // Lingo.make(new LingoTestUnit exceptionControl --vm="username" --main)
 
+module.exports = Lingo;
