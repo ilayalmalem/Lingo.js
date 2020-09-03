@@ -8,8 +8,8 @@
 <body>
     <div id="root">
         <input type="text" l-value="l">
-        <div class="d" repeat="todo in todos">
-            { todos }
+        <div class="d" style="display: flex;flex-direction: column;" repeat="todo in todos">
+            { todo }
         </div>
     </div>
     <script src="index.js"></script>
