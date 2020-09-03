@@ -1,5 +1,10 @@
-const Lingo = require('./index.js')
+var lingo = new window.Lingo('#root',{
+    todos: [
+        {name:'ss'},
+        'cxcx'
+    ]
+})
 
-var ds = new Lingo()
-
-console.log(ds)
+// lingo.data.todos.forEach(element => {
+//     console.log(element)
+// });

@@ -30,7 +30,7 @@ if (!empty && !commands.includes(args[0])) {
 }
 
 if(args[0] == '' || args == '') {
-    console.log('Welcome to lingoJS!')
+    console.log('Welcome to lingoJ!')
 }
 
 function printHelp(comName,comDescription,comChildNames,comChildDesc,params,flags){
