@@ -5,7 +5,9 @@ var lingo = new window.Lingo('#root',{
         {name:'Item 2',desc: 'Things',ouch:'ss'},
         {name:'Item 3',desc: 'Wow girl',ouch:'kk'},
         {name:'Item 4',desc: 'Handstanding like wow',ouch:'xx'},
-        {name:'Item 5',desc: 'Handstanding like wow',ouch:'xx'}
+        {name:'Item 5',desc: 'Handstanding like wow',ouch:'xx'},
+        {name:'Item 6',desc: 'Handstanding like wow',ouch:'xx'}
+
     ]
 })
 
