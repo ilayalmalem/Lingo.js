@@ -13,6 +13,7 @@ class Lingo {
         //Get the data driven varaibles
         this.data = data;
         this.setValues()
+        this.parse()
         this.setForLoops()
     }
 
@@ -80,8 +81,22 @@ class Lingo {
             for (let i = 0; i <= dataCount; i++) {
                 element.querySelectorAll('*').forEach((el) => {
                     var clone = el.cloneNode()
-                    var props = this.sanitize(el.textContent).replace(repeator, '').trim()
-                    clone.textContent = eval(`this.data.${repeator}[${i}]${props ? props : ''}`)
+                    var [props,original] = this.sanitize(el.textContent)
+                    var interpolations = []
+                    original.replace(/\{{(.*?)\}}/gi,(t,m) => interpolations.push(m))
+                    interpolations.forEach((int) => {
+                        console.log(int)
+                        // Replace interpolation
+                        // int = int.replace(repeator,'')
+                        original = original.replace(int, eval(`this.data.${repeator}[${i}]${int.replace(repeator,'')}`))
+                        console.log(original)
+                        // clone.textContent += eval(`this.data.${repeator}[${i}]${props ? props : ''}`)
+                        // clone.innerHTML += eval(`this.data.${repeator}[${i}]${int}`)
+                        // clone.innerHTML = clone.innerHTML.replace(props,'')
+                        // clone.innerHTML = clone.innerHTML.replace(repeator,'')
+
+                    })
+                    var props = props.replace(repeator, '').trim()
                     code.push(clone)
                 })
             }
@@ -98,10 +113,33 @@ class Lingo {
     }
 
     sanitize(code) {
-        code = code.trim().replace('{','')
-        code = code.trim().replace('}','')
-        return code;
+        var original = code
+        var code = code.substring(
+            code.lastIndexOf("{{") + 2, 
+            code.lastIndexOf("}}")
+        );
+        code = code.trim().replace('{{','')
+        code = code.trim().replace('}}','')
+        return [code,original];
     }
+
+    parse() {
+        var elements = document.querySelectorAll('*')
+        elements.forEach((el) => {
+
+        })
+    }
+
+    getAllSubstrings(str) {
+        var i, j, result = [];
+      
+        for (i = 0; i < str.length; i++) {
+            for (j = i + 1; j < str.length + 1; j++) {
+                result.push(str.slice(i, j));
+            }
+        }
+        return result;
+      }
 }
 
 window.Lingo = Lingo

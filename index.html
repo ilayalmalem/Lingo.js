@@ -9,10 +9,10 @@
     <div id="root">
         <input type="text" l-value="l">
         <h1>Todo in todos</h1>
-        <div class="d" repeat="todo in todos">
-            <h3 style="margin: 0;padding: 0;">{ todo.name }</h3>
-            <p>{ todo.desc }</p>
-        </div>
+        <ol repeat="task in tasks">
+            <li>{{ task.name }} is {{ task.age }} years old</li>
+        </ol>
+
     </div>
     <script src="index.js"></script>
     <script src="./tester.js"></script>
