@@ -9,7 +9,9 @@
     <div id="root">
         <input type="text" l-value="l">
         <div class="d" style="display: flex;flex-direction: column;" repeat="todo in todos">
-            { todo }
+            <div style="background-color: blanchedalmond;">{ todo.name }</div>
+            <div class="">{ todo.desc }</div>
+            <!-- <div>{ todo.desc} </div> -->
         </div>
     </div>
     <script src="index.js"></script>

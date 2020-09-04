@@ -61,58 +61,71 @@ class Lingo {
         })
     }
     setForLoops() {
-        // elements.forEach((element) => {
-        //     var statement = element.getAttribute('repeat')
-        //     var repeatorLiteral = statement.substr(0, statement.indexOf('in')).trim()
-        //     var object = statement.split('in').pop().trim();
-        //     var repeator = repeatorLiteral
-        //         try {
-        //             console.log(`${repeatorLiteral} in ${object}`)
-        //             for (repeatorLiteral in this.data[`${object}`]) {
-        //                 if(element.textContent.includes('{')) {
-        //                     let t = element.textContent.replace('{','')
-        //                     t = t.replace('}','')
-        //                     element.textContent = t
-
-        //                     var newLit = element.textContent.replace(`${repeator}`,`${this.data[`${object}`][`${repeatorLiteral}`]}`)
-        //                     var exec = eval(`this.data.${element.textContent}`)
-        //                     element.textContent = exec
-        //                     alert(exec)
-        //                 }
-        //             }
-        //         }
-        //         catch(e) {
-        //             console.log(e)
-        //         }
-        // })
         // Get all elements with the repeat attribute, and foreach on them
         var elements = document.querySelectorAll('[repeat]')
         elements.forEach((element,index) => {
-            // Get the data to be looped on
+            // // Get the data to be looped on
+
+            // var interpolations = element.textContent.split(/[{}]/);
+            
+            // interpolations.forEach((interpolation,index) => {
+            //     // element.textContent = this.sanitize(element.textContent)
+            //     var attrs = interpolation.replace(repeator, '').trim()
+            //     var isObject = attrs == '' ? true : false;
+
+            //     var displayed = []
+            //     if(isObject) {
+            //         for(const key in this.data[object]) {
+            //             var o = this.data[object][key]
+            //             Object.values(o).forEach((k) => {
+            //                 displayed.push('<div>' + k + '</div>')
+            //             })
+            //         }
+            //         interpolations = displayed.join('')
+            //     }else {
+            //         // interpolations[index] = eval(`this.data.${object}${isObject ? '' : '[0]' }${attrs}`)
+            //     }
+
+            // })
+
+            // console.log(interpolations)
+
+            // var srctext = element.textContent
+            // var re = /(.*{\s+)(.*)(\s+}.*)/;
+            // element.textContent = element.textContent.replace(re,interpolations )
+
             // This is the statement something like this: todo in todod; todo = repeator, object = this.data.todos
             var statement = element.getAttribute('repeat')
             var repeatorLiteral = statement.substr(0, statement.indexOf('in')).trim()
             var object = statement.split('in').pop().trim();
             var repeator = repeatorLiteral
-            
-            element.textContent = this.sanitize(element.textContent)
-            var code = element.textContent
-            var encapsulated = code.split(/[{}]/);
 
-            // remove whitespaces
-            encapsulated = encapsulated.filter(function (el) {
-                return el != '';
-            });
-            element.textContent = ''
-            // Loop over todos
-            this.data[object].forEach((el,index) => {
-                var todoItem = encapsulated[index]
-                code = this.sanitize(code)
+            element.querySelectorAll('*').forEach((el) => {
+                // Replace with interpolation
+                el.textContent = this.sanitize(el.textContent)
 
-                for (const key in el) {
-                    element.innerHTML += '<div>' + eval(`this.data.${object}[${index}].${key}`) + '</div>'
+                var props = el.textContent.replace(repeator, '').trim()
+                var inter = []
+                if(props) {
+                    var da = eval(`this.data['${object}']`)
+                    for(const io in da){
+                        inter.push(eval(`this.data.${object}[${io}]${props}`))
+                    }
                 }
+                else {
+                    inter.push(eval(`this.data.${object}`))
+                }
+                el.textContent = ''
+                console.log(inter)
+                inter.forEach((int,index) => {
+                    var duplicate = el.cloneNode()
+                    duplicate.innerHTML = int
+                    element.appendChild(duplicate)
+                    // el.textContent += el.textContent.replace(el.textContent,inter[index])
+                    // element.innerHTML += el.innerHTML
+                })
             })
+
         })
     }
 
