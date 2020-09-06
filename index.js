@@ -79,21 +79,17 @@ class Lingo {
             }
             var code = []
             for (let i = 0; i <= dataCount; i++) {
-                element.querySelectorAll('*').forEach((el) => {
+                element.querySelectorAll(`:scope > *`).forEach((el) => {
                     var clone = el.cloneNode()
-                    var [props,original] = this.sanitize(el.textContent)
+
+                    var [props,original] = this.sanitize(el.innerHTML)
                     var interpolations = []
                     original.replace(/\{{(.*?)\}}/gi,(t,m) => interpolations.push(m))
                     interpolations.forEach((int) => {
-                        console.log(int)
                         // Replace interpolation
-                        // int = int.replace(repeator,'')
                         original = original.replace(int, eval(`this.data.${repeator}[${i}]${int.replace(repeator,'')}`))
-                        clone.textContent = original.replace(/[{{}}]/g,'')
-                        // clone.innerHTML += eval(`this.data.${repeator}[${i}]${int}`)
-                        // clone.innerHTML = clone.innerHTML.replace(props,'')
-                        // clone.innerHTML = clone.innerHTML.replace(repeator,'')
-
+                        clone.innerHTML = original.replace(/[{{}}]/g,'')
+                        // console.log(original.replace(/[{{}}]/g,''))
                     })
                     var props = props.replace(repeator, '').trim()
                     code.push(clone)
