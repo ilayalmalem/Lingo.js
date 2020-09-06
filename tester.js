@@ -1,4 +1,4 @@
-var lingo = new window.Lingo('#root',{
+var lingo = new Lingo('#root',{
     l:'ss',
     tasks: [
         {name:'Mark', desc:'Cool item',age:'6'},
@@ -10,7 +10,3 @@ var lingo = new window.Lingo('#root',{
 
     ]
 })
-
-// lingo.data.todos.forEach(element => {
-//     console.log(element)
-// });

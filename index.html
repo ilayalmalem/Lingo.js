@@ -9,10 +9,10 @@
     <div id="root">
         <input type="text" l-value="l">
         <h1>Todo in todos</h1>
-        <ol repeat="task in tasks">
-            <li><b>{{ task.name }}</b> is {{ task.age }} years old</li>
-        </ol>
-
+        <ul repeat="task in tasks">
+            <li><b>{{ task.name }}</b> is {{ task.age }} years old. He says he's a <i><b>{{ task.desc }}!</b></i></li>
+        </ul>
+        {{ Array.isArray(['dd']) }}
     </div>
     <script src="index.js"></script>
     <script src="./tester.js"></script>
