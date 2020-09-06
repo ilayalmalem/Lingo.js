@@ -1,4 +1,4 @@
-var Lingo = require('../index.js');
+var Lingo = require('../../index.js');
 var mkdirp = require('mkdirp');
 var fs = require('fs');
 //Get CLI args

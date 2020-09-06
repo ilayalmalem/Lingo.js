@@ -7,14 +7,14 @@
 </head>
 <body>
     <div id="root">
-        <input type="text" l-value="l">
+        <input type="text" l-value="ls">
         <h1>Todo in todos</h1>
-        <ul repeat="task in tasks">
-            <li><b>{{ task.name }}</b> is {{ task.age }} years old. He says he's a <i><b>{{ task.desc }}!</b></i></li>
+        <ul repeat="people in peoples">
+            <li><b>{{ people.name }}</b> is {{ people.age }} years old. He says he's a <i><b>{{ people.desc }}!</b></i></li>
         </ul>
         {{ Array.isArray(['dd']) }}
     </div>
-    <script src="index.js"></script>
+    <script src="./dist/index.js"></script>
     <script src="./tester.js"></script>
 </body>
 </html>
