@@ -89,8 +89,7 @@ class Lingo {
                         // Replace interpolation
                         // int = int.replace(repeator,'')
                         original = original.replace(int, eval(`this.data.${repeator}[${i}]${int.replace(repeator,'')}`))
-                        console.log(original)
-                        // clone.textContent += eval(`this.data.${repeator}[${i}]${props ? props : ''}`)
+                        clone.textContent = original.replace(/[{{}}]/g,'')
                         // clone.innerHTML += eval(`this.data.${repeator}[${i}]${int}`)
                         // clone.innerHTML = clone.innerHTML.replace(props,'')
                         // clone.innerHTML = clone.innerHTML.replace(repeator,'')
