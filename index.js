@@ -9,12 +9,12 @@ class Lingo {
     //Construct the lingo object
     constructor(element,data){
         //Set the main element to the element tag
-        this.element = element;
+        this.element = document.querySelector(element);
         //Get the data driven varaibles
         this.data = data;
         this.setValues()
-        this.parse()
         this.setForLoops()
+        this.parse()
     }
 
     setValues() {
@@ -103,10 +103,6 @@ class Lingo {
         })
     }
 
-    buildBlock(items,el) {
-
-    }
-
     sanitize(code) {
         var original = code
         var code = code.substring(
@@ -119,10 +115,22 @@ class Lingo {
     }
 
     parse() {
-        var elements = document.querySelectorAll('*')
-        elements.forEach((el) => {
+        // This will eval each interpolation
+        var docText = this.element.innerHTML;
+        var inters = []
 
+        docText.replace(/\{{(.*?)\}}/gi,(m,t) => {
+            inters.push(m)
         })
+        inters.forEach((inter,index) => {
+            try {
+                let interVal = eval(inter)
+                this.element.innerHTML = this.element.innerHTML.replace(inter,interVal)
+            }
+            catch(e) {
+                console.error(e)
+            }
+        }) 
     }
 
     getAllSubstrings(str) {
